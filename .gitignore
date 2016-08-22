@@ -1,0 +1,10 @@
+*.log
+*.pyc
+*.swp
+*~
+.DS_Store
+.idea/
+venv/
+tmp/
+.env
+.token
