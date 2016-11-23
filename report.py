@@ -5,13 +5,14 @@ import pytz
 import re
 
 def fetch_prs_merged(date_from, date_to):
+    print u"Fetching from {} to {}".format(date_from, date_to)
     # login
     token = open(".token").read().strip()
     gh = login(token=token)
 
     # fetch
     repo = gh.repository('minervaproject', 'schools')
-    recent_prs = list(repo.pull_requests(state='closed', number=100))
+    recent_prs = list(repo.pull_requests(state='closed', number=2000))
 
     def include_pr(pr):
         return (pr.merged_at is not None) and \
@@ -44,14 +45,14 @@ def test_overview(pr):
     test_changes = sum([f.changes_count for f in test_files])
     test_deletions = sum([f.deletions_count for f in test_files])
 
-    return "{}+/{}-/{} changed".format(test_additions, test_deletions, test_changes)
+    return u"{}+/{}-/{} changed".format(test_additions, test_deletions, test_changes)
 
 
 # report
 def print_report_tsv(date_from, date_to):
-    print "Username\tMerged\tTitle\tNumber\tLink\tComments\tTests"
+    print u"Username\tMerged\tTitle\tNumber\tLink\tComments\tTests"
     for pr in fetch_prs_merged(date_from, date_to):
-        print "{username}\t{merged}\t{title}\t{number}\t{link}\t{comments}\t{test_overview}".format(
+        print u"{username}\t{merged}\t{title}\t{number}\t{link}\t{comments}\t{test_overview}".format(
             username=pr.user.login,
             merged=pr.merged_at.strftime("%a %Y-%m-%d"),
             title=pr.title,
